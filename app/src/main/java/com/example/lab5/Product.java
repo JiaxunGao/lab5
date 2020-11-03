@@ -3,16 +3,16 @@ package com.example.lab5;
 public class Product {
     private String _id;
     private String _productname;
-    private String _price;
+    private Double _price;
 
     public Product() {
     }
-    public Product(String id, String productname, String price) {
+    public Product(String id, String productname, Double price) {
         _id = id;
         _productname = productname;
         _price = price;
     }
-    public Product(String productname, String price) {
+    public Product(String productname, Double price) {
         _productname = productname;
         _price = price;
     }
@@ -29,10 +29,10 @@ public class Product {
     public String getProductName() {
         return _productname;
     }
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         _price = price;
     }
-    public String getPrice() {
+    public Double getPrice() {
         return _price;
     }
 }

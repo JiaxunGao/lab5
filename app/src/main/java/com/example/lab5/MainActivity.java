@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -50,12 +51,16 @@ public class MainActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("Product").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                products.clear();
                 for (DataSnapshot postSnapshot: snapshot.getChildren()){
+
                     Product toAdd = postSnapshot.getValue(Product.class);
                     products.add(toAdd);
                 }
-                //ProductList adapter = new ProductList(getApplicationContext(),products);
-                //listViewProducts.setAdapter(adapter);
+
+                ProductList adapter = new ProductList(MainActivity.this,products);
+                listViewProducts.setAdapter(adapter);
+
             }
 
             @Override
@@ -128,20 +133,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateProduct(String id, String name, double price) {
+        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Product").child(id);
+        Product product = new Product(id,name,price);
+        dr.setValue(product);
+        Toast.makeText(getApplicationContext(),"Product Updated",Toast.LENGTH_LONG).show();
 
-        Toast.makeText(getApplicationContext(), "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
     }
 
-    private void deleteProduct(String id) {
-
+    private boolean deleteProduct(String id) {
+        Toast.makeText(getApplicationContext(),"Product deleted",Toast.LENGTH_LONG).show();
         FirebaseDatabase.getInstance().getReference("Product").child(id).removeValue();
+        return true;
     }
 
     private void addProduct() {
-        String name = editTextName.getText().toString();
-        String price = editTextPrice.getText().toString();
-        String id = FirebaseDatabase.getInstance().getReference("Product").push().getKey();
-        Product toCreate = new Product(id,name,price);
-        FirebaseDatabase.getInstance().getReference("Product").child(id).setValue(toCreate);
+        String name = editTextName.getText().toString().trim();
+        Double price = Double.valueOf(String.valueOf(editTextPrice.getText()));
+        if(!TextUtils.isEmpty(name)){
+            String id = FirebaseDatabase.getInstance().getReference("Product").push().getKey();
+            Product toCreate = new Product(id,name,price);
+            FirebaseDatabase.getInstance().getReference("Product").child(id).setValue(toCreate);
+            editTextName.setText("");
+            editTextPrice.setText("");
+            Toast.makeText(getApplicationContext(),"Product added",Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(getApplicationContext(),"Please enter a name",Toast.LENGTH_LONG).show();
+        }
+
+
+
     }
 }
