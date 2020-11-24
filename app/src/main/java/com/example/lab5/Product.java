@@ -11,14 +11,11 @@ public class Product {
         _id = id;
         _productname = productname;
         _price = price;
-    }
-    public Product(String productname, Double price) {
-        _productname = productname;
-        _price = price;
+
     }
 
-    public Product(String id, String dell_monitor, int price) {
-    }
+
+
 
     public void setId(String id) {
         _id = id;
