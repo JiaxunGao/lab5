@@ -17,6 +17,9 @@ public class Product {
         _price = price;
     }
 
+    public Product(String id, String dell_monitor, int price) {
+    }
+
     public void setId(String id) {
         _id = id;
     }
